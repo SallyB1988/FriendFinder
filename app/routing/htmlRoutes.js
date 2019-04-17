@@ -14,12 +14,19 @@ module.exports = function(app) {
   app.get("/survey", function(req, res) {
     res.sendFile(path.join(__dirname, "../public/survey.html"));
   });
+  
+  // This weird route is so I can have a separate JS file for setting
+  // up the Questions and JQuery for injecting the questions dynamically
+  app.get("/questions", function(req, res) {
+    res.sendFile(path.join(__dirname, "../public/questions.js"));
+  });
 
   app.get("/", function(req, res) {
     res.sendFile(path.join(__dirname, "../public/home.html"));
   });
+
   // If no matching route - default to home
   app.get("*", function(req, res) {
     res.sendFile(path.join(__dirname, "../public/home.html"));
   });
-}
+};

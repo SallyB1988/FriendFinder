@@ -1,4 +1,4 @@
-var express = require('express');
+var express = require("express");
 //=================================================
 // Setup Express configuration
 //=================================================
@@ -8,7 +8,8 @@ var PORT = process.env.PORT || 8080;
 // Set up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(express.static(__dirname + "/images"));
+// app.use("/public",express.static(__dirname + "/public"));
+// app.use(express.static(__dirname + "/public"));
 
 // ================================================
 // Router
