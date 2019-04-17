@@ -8,6 +8,8 @@ var PORT = process.env.PORT || 8080;
 // Set up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// app.use(express.static(__dirname + "/images"));
+
 // ================================================
 // Router
 // ================================================

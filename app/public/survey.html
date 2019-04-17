@@ -34,35 +34,35 @@
           <div class="form-group">
             <h4>Question 1</h4>
             <label for="friend-q1">Your mind is always buzzing with unexplored ideas and plans</label>
-            <select class="custom-select mr-sm-2" id="friend-q1">
-              <option value="0" selected>Select an Option</option>
-              <option value="1">1 (Strongly Disagree)</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5 (Strongly Agree)</option>
+            <select class="custom-select mr-sm-2" id="friend-q1" name="ans1">
+              <option value=0 selected>Select an Option</option>
+              <option value=1>1 (Strongly Disagree)</option>
+              <option value=2>2</option>
+              <option value=3>3</option>
+              <option value=4>4</option>
+              <option value=5>5 (Strongly Agree)</option>
             </select>
 
             <h4>Question 2</h4>
             <label for="friend-q2">Your favorite color is purple.</label>
-            <select class="custom-select mr-sm-2" id="friend-q2">
-              <option value="0" selected>Select an Option</option>
-              <option value="1">1 (Strongly Disagree)</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5 (Strongly Agree)</option>
+            <select class="custom-select mr-sm-2" id="friend-q2" name="ans2">
+              <option value=0 selected>Select an Option</option>
+              <option value=1>1 (Strongly Disagree)</option>
+              <option value=2>2</option>
+              <option value=3>3</option>
+              <option value=4>4</option>
+              <option value=5>5 (Strongly Agree)</option>
             </select>
 
-            <h4>Question 1</h4>
+            <h4>Question 3</h4>
             <label for="friend-q3">Life is like a box of chocolates.</label>
-            <select class="custom-select mr-sm-2" id="friend-q3">
-              <option value="0" selected>Select an Option</option>
-              <option value="1">1 (Strongly Disagree)</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5 (Strongly Agree)</option>
+            <select class="custom-select mr-sm-2" id="friend-q3" name="ans3">
+              <option value=0 selected>Select an Option</option>
+              <option value=1>1 (Strongly Disagree)</option>
+              <option value=2>2</option>
+              <option value=3>3</option>
+              <option value=4>4</option>
+              <option value=5>5 (Strongly Agree)</option>
             </select>
 
           </div>
@@ -85,13 +85,20 @@
     event.preventDefault();
 
     // Here we grab the form elements
+    const newScores = getScores();
     var newFriend = {
       name: $("#friend-name").val().trim(),
       photo: $("#friend-photo").val().trim(),
-      scores: [$("#friend-q1").val(),$("#friend-q2").val(),$("#friend-q3").val()]
+      scores: [parseInt($("#friend-q1").val()),parseInt($("#friend-q2").val()),parseInt($("#friend-q3").val())]
     };
 
     console.log(newFriend);
+    // Find total score
+    const sum = (acc, curVal) => acc + curVal;
+    const totalScore = newFriend.scores.reduce(sum);
+    newFriend['total'] = totalScore;
+    
+    console.log(`Your total score is ${totalScore}`);
 
     // This line is the magic. It"s very similar to the standard ajax function we used.
     // Essentially we give it a URL, we give it the object we want to send, then we have a "callback".
@@ -103,9 +110,11 @@
 
         console.log("after adding person...");
         console.log(data);
+
         // If data is available... tell user they are in the system.
         if (data) {
-          alert("Yay! You added have been added!");
+          var bestMatch = findBestMatch(newFriend.name, newFriend.total, data);
+          alert("Your best match is : " + bestMatch.name);
         }
 
         // If a data is not available... error.
@@ -122,5 +131,19 @@
       });
 
   });
+
+  const findBestMatch = (name, total, array) => {
+    var minMatch = 100000;
+    var friendMatch = {};
+
+    
+    array.forEach((p) => {
+      if ((name != p.name) && ((total - p.total) < minMatch)) {
+        minMatch = Math.abs(total-p.total);
+        friendMatch = p;
+      }
+    });
+    return friendMatch;
+  }
 
 </script>

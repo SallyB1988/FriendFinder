@@ -27,7 +27,7 @@ module.exports = function(app) {
 
     friendsData.push(req.body);   // add new friend to the friendsData array so it
                                   // can be used later to determine the best match
-    res.json(true);
+    res.json(friendsData);
   })
 
 }
