@@ -19,11 +19,13 @@ module.exports = function(app) {
   // When a user submits form data (a JSON object), the JSON is pushed
   // to the JavaScript array (friendsArray)
   app.post("/api/friends", function(req, res) {
-    // Note the code here. Our "server" will respond to requests and let users know if they have been
-    // entered into the database or not.
-    // It will do this by returning the value "true" after post has occurred.
-    // This is received as 'data' in the .post function in survey.html.
-    // (I don't think this is really necessary...)
+
+    // THIS CHANGES THE SCORES AND TOTAL FROM STRINGS TO INTEGERS BEFORE POSTING TO THE SERVER!!
+    var temp = req.body.scores;
+    for(let i = 0; i < temp.length; i++){
+      req.body.scores[i] = parseInt(req.body.scores[i])
+    }
+    req.body.total = parseInt(req.body.total);
 
     friendsData.push(req.body);   // add new friend to the friendsData array so it
                                   // can be used later to determine the best match
