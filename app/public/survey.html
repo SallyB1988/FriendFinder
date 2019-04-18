@@ -13,12 +13,13 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+    <link rel="stylesheet" href="./css/style.css" />
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <div class="container">
-      <div class="row">
+    <div id="main-survey" class="container">
+      <div id="survey-title" class="row">
         <h1>Survey Questions</h1>
         <hr />
       </div>
@@ -41,6 +42,34 @@
       </div>
       <a href="/api/friends">API Friends List</a> |
       <a href="#">GitHub Repo</a>
+      <footer><p class="py-3 text-center footer">Beckwith Surveys</p></footer>
+
+      <!-- Modal -->
+      <div class="modal fade" id="bestMatchModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="bestMatchLabel">
+                Your Next Best Friend is...
+              </h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div id="modal-image" class="col-md-4"></div>
+                <div id="modal-name" class="col-md-8 mt-4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <script type="text/javascript" src="./questions"></script>
   </body>
@@ -56,48 +85,57 @@
 
   $(".submit").on("click", function(event) {
     event.preventDefault();
+    errormsg = "";
 
-    // Here we grab the form elements
-    const newScores = getScores();
-    console.log('newScores: ' + JSON.stringify(newScores))
-    var newFriend = {
-      name: $("#friend-name")
-        .val()
-        .trim(),
-      photo: $("#friend-photo")
-        .val()
-        .trim(),
-      scores: newScores,
-    };
+    if ($("#friend-name").val() === "") {
+      errormsg = "Name is required.\n";
+    }
+    if ($("#friend-photo").val() === "") {
+      errormsg += "Link to image is required.";
+    }
 
-    // Find total score
-    const sum = (acc, curVal) => acc + curVal;
-    const totalScore = newFriend.scores.reduce(sum);
-    newFriend["total"] = parseInt(totalScore);
-    console.log(newFriend);
+    if (errormsg === "") {
+      // Here we grab the form elements
+      const newScores = getScores();
+      console.log("newScores: " + JSON.stringify(newScores));
+      var newFriend = {
+        name: $("#friend-name")
+          .val()
+          .trim(),
+        photo: $("#friend-photo")
+          .val()
+          .trim(),
+        scores: newScores
+      };
 
-    // QUESTION -- newFriend at this point contains integers in the
-    //        scores array and total value, but after it is posted, the integers turn
-    //        into strings.  WHY???
+      // Find total score
+      const sum = (acc, curVal) => acc + curVal;
+      const totalScore = newFriend.scores.reduce(sum);
+      newFriend["total"] = parseInt(totalScore);
+      console.log(newFriend);
 
-    console.log(`Your total score is ${totalScore}`);
-    $.post("/api/friends", newFriend, function(data) {
-      console.log(data);
-      console.log("after adding person...");
+      // QUESTION -- newFriend at this point contains integers in the
+      //        scores array and total value, but after it is posted, the integers turn
+      //        into strings.  WHY???
 
-      console.log(data);
-      // If data is available... show user their best match.
-      if (data) {
-        var bestMatch = findBestMatch(newFriend.name, newFriend.total, data);
-        alert("Your best match is : " + bestMatch.name);
-      }
-      clearQuestions();
-    })
-    // QUESTION -- what is the best way to handle server errors using jQuery??
-    // I can't seem to print out the exact error
-    .fail(() => {
-        alert('Server error occurred');
-    });
+      console.log(`Your total score is ${totalScore}`);
+      $.post("/api/friends", newFriend, function(data) {
+        // If data is available... show user their best match.
+        if (data) {
+          var bestMatch = findBestMatch(newFriend.name, newFriend.total, data);
+          displayBestMatch(bestMatch.name, bestMatch.photo);
+          // alert("Your best match is : " + bestMatch.name);
+        }
+        clearQuestions();
+      })
+        // QUESTION -- what is the best way to handle server errors using jQuery??
+        // I can't seem to print out the exact error
+        .fail(() => {
+          alert("Server error occurred");
+        });
+    } else {
+      alert(errormsg);
+    }
   });
 
   const findBestMatch = (name, total, array) => {
@@ -105,9 +143,12 @@
     var friendMatch = {};
 
     array.forEach(p => {
-      if (name != p.name && total - p.total < minMatch) {
-        minMatch = Math.abs(total - p.total);
+      var diff = Math.abs(total-p.total);
+      if (name != p.name && diff < minMatch) {
+        minMatch = diff;
+        console.log('minimum = ' + minMatch);
         friendMatch = p;
+        console.log(friendMatch);
       }
     });
     return friendMatch;

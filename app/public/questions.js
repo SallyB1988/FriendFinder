@@ -19,16 +19,19 @@ window.onload = function() {
 const createQuestions = () => {
 
   for (let i = 0; i < questions.length; i++) {
-    var html = `<h4>Question ${i+1}</h4>
-    <label for="friend-q${i}">${questions[i]}</label>
-    <select class="custom-select mr-sm-2" id="friend-q${i}" name="ans${i}">
-      <option selected>Select an Option</option>
-      <option>1 (Strongly Disagree)</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5 (Strongly Agree)</option>
-    </select>`;
+    var html = `
+    <div class="my-1 p-2 border question-card">
+      <h4 class="py-1 px-3">Question ${i+1}</h4>
+      <label class="px-4 py-1" for="friend-q${i}"><h5>${questions[i]}</h5></label>
+      <select class="custom-select w-100 mx-4" id="friend-q${i}" name="ans${i}">
+        <option selected>Select an Option</option>
+        <option>1 (Strongly Disagree)</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5 (Strongly Agree)</option>
+      </select>
+    </div>`;
     $("#disp-questions").append(html);
   }
 };
@@ -52,3 +55,13 @@ const getScores = () => {
   console.log(arr);
   return arr;
 };
+
+const displayBestMatch = (name, img) => {
+  console.log("inside displayBestMatch.....");
+  console.log(img);
+  let $friendImage = $("#modal-image");
+  let $friendName = $("#modal-name");
+  $friendImage.html(`<img id="friend-image" src=${img} >`);
+  $friendName.html(`<h3>${name}</h3>`);
+  $("#bestMatchModal").modal();
+}

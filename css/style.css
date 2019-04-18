@@ -1,0 +1,60 @@
+body {
+  background-image: url("../images/bkg.jpg");
+  background-size: cover;
+}
+.custom-select {
+  padding: 8px 8px;
+  margin: 0px 8px 16px 8px;
+  width: 95% !important;
+  background-color: white;
+}
+
+.question-card {
+  background-color: #e4e7ea;
+}
+#start-survey {
+  background-color: white;
+}
+
+#modal-name {
+  margin-top: 2.3rem !important;
+}
+
+#friend-image {
+  width: 100px !important;
+  height: 100px !important;
+}
+
+.jumbotron {
+  background-color: #ceddec !important;
+}
+
+.ff-title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 50px;
+  margin-left: 30px;
+}
+
+.ff-intro {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  padding: 3rem, 4rem;
+}
+
+.footer {
+  background-color: rgb(145, 195, 243) !important;
+  margin-top: 50px;
+  padding: 2em 4em;
+
+  color:  white;
+}
+
+#survey-title {
+  background-color: #ceddec !important;
+  padding: 2em 4em;
+}
+
+#main-survey {
+  background-color: #eff4f5 !important;
+
+}
