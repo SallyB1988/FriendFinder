@@ -12,7 +12,6 @@ const questions = [
 ];
 
 window.onload = function() {
-  console.log("hello");
   createQuestions();
 };
 
@@ -48,17 +47,12 @@ const getScores = () => {
   let arr = [];
   for (let i = 0; i < questions.length; i++) {
     let value = parseInt($(`#friend-q${i}`).val());
-    console.log(value);
     arr.push(value|| 0);
   }
-  console.log('array is ');
-  console.log(arr);
   return arr;
 };
 
 const displayBestMatch = (name, img) => {
-  console.log("inside displayBestMatch.....");
-  console.log(img);
   let $friendImage = $("#modal-image");
   let $friendName = $("#modal-name");
   $friendImage.html(`<img id="friend-image" src=${img} >`);

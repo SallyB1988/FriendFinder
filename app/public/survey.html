@@ -41,7 +41,7 @@
         </form>
       </div>
       <a href="/api/friends">API Friends List</a> |
-      <a href="#">GitHub Repo</a>
+      <a href="https://github.com/SallyB1988/FriendFinder">GitHub Repo</a>
       <footer><p class="py-3 text-center footer">Beckwith Surveys</p></footer>
 
       <!-- Modal -->
@@ -97,7 +97,6 @@
     if (errormsg === "") {
       // Here we grab the form elements
       const newScores = getScores();
-      console.log("newScores: " + JSON.stringify(newScores));
       var newFriend = {
         name: $("#friend-name")
           .val()
@@ -112,19 +111,13 @@
       const sum = (acc, curVal) => acc + curVal;
       const totalScore = newFriend.scores.reduce(sum);
       newFriend["total"] = parseInt(totalScore);
-      console.log(newFriend);
+      newFriend;
 
-      // QUESTION -- newFriend at this point contains integers in the
-      //        scores array and total value, but after it is posted, the integers turn
-      //        into strings.  WHY???
-
-      console.log(`Your total score is ${totalScore}`);
       $.post("/api/friends", newFriend, function(data) {
         // If data is available... show user their best match.
         if (data) {
           var bestMatch = findBestMatch(newFriend.name, newFriend.total, data);
           displayBestMatch(bestMatch.name, bestMatch.photo);
-          // alert("Your best match is : " + bestMatch.name);
         }
         clearQuestions();
       })
@@ -143,12 +136,10 @@
     var friendMatch = {};
 
     array.forEach(p => {
-      var diff = Math.abs(total-p.total);
+      var diff = Math.abs(total - p.total);
       if (name != p.name && diff < minMatch) {
         minMatch = diff;
-        console.log('minimum = ' + minMatch);
         friendMatch = p;
-        console.log(friendMatch);
       }
     });
     return friendMatch;
